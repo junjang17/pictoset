@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Term Crop
+{% endblock %}
+
+{% block main %}
+    <header>
+        <div id="alert" class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            Please select a valid crop region.
+        </div>
+    </header>
+
+    <h1>Drag and select your terms!</h1>
+    <br>
+
+
+        <div class="crop-box">
+            <img src="{{path}}" id="target">
+        </div>
+        <!--<img src="{{path}}" id="target" style="border:5px solid black">-->
+        <!--Javascript code in scripts.js-->
+        <form onsubmit="checkCoords();" action="/term_crop" method="post" enctype=multipart/form-data class="coords">
+			<input type="hidden" size="4" id="x1" name="x1" />
+			<input type="hidden" size="4" id="y1" name="y1" />
+			<input type="hidden" size="4" id="x2" name="x2" />
+			<input type="hidden" size="4" id="y2" name="y2" />
+			<input type="hidden" size="4" id="w" name="w" />
+			<input type="hidden" size="4" id="h" name="h" />
+            <br>
+            <button id="submit" type="submit" class="btn btn-primary btn-block">Crop Image</button>
+		</form>
+
+
+{% endblock %}

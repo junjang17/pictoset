@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Pictoset How To
+{% endblock %}
+
+{% block main %}
+    <h1>How To</h1>
+
+    <div id="how_to">
+        <p>1. Click Create Set</p>
+        <div class="image-container">
+            <img class="how_to" src="{{ url_for('static', filename='images/create_set.jpg') }}">
+        </div>
+
+        <p>2. Upload an image</p>
+        <div class="image-container">
+
+            <img class="how_to" src="{{ url_for('static', filename='images/upload.png') }}">
+        </div>
+
+        <div class="gif-container">
+            <p>3. Select your terms</p>
+            <img src="{{ url_for('static', filename='images/crop_term.gif') }}">
+        </div>
+
+        <div class="gif-container">
+            <p>4. Select your definitions</p>
+            <img src="{{ url_for('static', filename='images/crop_def.gif') }}">
+        </div>
+
+        <div class="gif-container">
+            <p>5. Enter title, set languages, and submit!</p>
+            <img src="{{ url_for('static', filename='images/submit.gif') }}">
+        </div>
+
+    </div>
+
+{% endblock %}
+

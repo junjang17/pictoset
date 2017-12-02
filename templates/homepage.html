@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Pictoset Home
+{% endblock %}
+
+{% block main %}
+
+    {% if session.user_id %}
+        <h1>Dashboard</h1>
+        <div id="content">
+            <p>You are logged in as:
+                <p id="username">
+                    <a href="http://www.quizlet.com/latest">{{session.user_id}}</a>
+            </p>
+            <p>Click your name to visit your quizlet account!</p>
+            <br>
+            <a href="/upload_image" class="btn btn-large btn-success">Create a Set</a>
+        </div>
+
+    {% else %}
+        <h1>Welcome to PICTOSET</h1>
+        <div id="prelog">
+            <br><br>
+            <p>Please Log In!</p>
+            <a href="/login" id="login" class="btn btn-large btn-info">Log in with Quizlet</a>
+            <br><br>
+            <p>Visit How To and About for more information!</p>
+        </div>
+    {% endif %}
+
+
+{% endblock %}

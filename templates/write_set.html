@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create Set
+{% endblock %}
+
+{% block main %}
+    <h1>Create Set</h1>
+    <br>
+    <form action="/write_set" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Set Title" type="text"/>
+        </div>
+
+
+        <div class="form-group">
+            Term Language:
+            <br>
+            <select name="lang_terms">
+                <option value="eng">English</option>
+                <option value="chi_sim">Chinese (simplified)</option>
+                <option value="chi_tra">Chinese (traditional)</option>
+                <option value="fra">French</option>
+                <option value="spa">Spanish</option>
+                <option value="rus">Russian</option>
+                <option value="jpn">Japanese</option>
+                <option value="kor">Korean</option>
+                <option value="hin">Hindi</option>
+                <option value="deu_frak">German</option>
+                <option value="ita">Italian</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            Definition Language:
+            <br>
+            <select name="lang_definitions">
+                <option value="eng">English</option>
+                <option value="chi_sim">Chinese (simplified)</option>
+                <option value="chi_tra">Chinese (traditional)</option>
+                <option value="fra">French</option>
+                <option value="spa">Spanish</option>
+                <option value="rus">Russian</option>
+                <option value="jpn">Japanese</option>
+                <option value="kor">Korean</option>
+                <option value="hin">Hindi</option>
+                <option value="deu_frak">German</option>
+                <option value="ita">Italian</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Create</button>
+    </form>
+{% endblock %}

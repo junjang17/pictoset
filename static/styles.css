@@ -1,0 +1,132 @@
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+
+}
+
+body {
+    font-family: "Apple SD Gothic Neo";
+}
+
+.navbar-expand-md
+{
+    color: #003bb3;
+}
+
+/* colors for brand */
+nav .navbar-brand .white
+{
+    color: #FFFFFF !important;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+main table
+{
+    /* left-align contents */
+    text-align: left;
+}
+
+main tfoot
+{
+    /* boldface tables' footers */
+    font-weight: bold;
+}
+
+body main div.crop-box{
+    border:3px solid black;
+}
+
+body main div p#username{
+    font-size: xx-large;
+}
+
+
+body main div#how_to{
+    padding-top: 50px;
+}
+
+body main div#how_to p {
+    font-size: xx-large;
+}
+
+body main div#content{
+    padding-top: 100px;
+}
+
+body main div.image-container{
+    width:480px;
+    height:300px;
+    margin:auto;
+
+}
+
+body main div.gif-container{
+    padding-bottom: 100px;
+    margin:auto;
+
+}
+
+body main a#login{
+    font-size: xx-large;
+}
+
+body main div#prelog{
+    padding-top: 75px;
+
+}
+
+body main div#prelog p{
+    font-size: x-large;
+}
+
+
+
+/* The alert message box */
+.alert {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    display:none;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+    color: black;
+}
