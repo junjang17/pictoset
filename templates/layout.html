@@ -54,27 +54,20 @@
                         <li class="nav-item"><a class="nav-link" href="/about" style="color:white">About</a></li>
                     </ul>
                 {% endif %}
-                <!--{% if session.user_id %}-->
-                    <!--<ul class="navbar-nav mr-auto mt-2">-->
-                        <!--<li class="nav-item"><a class="nav-link" href="/upload_image"><p style="color:white">Create a Set</p></a></li>-->
-                        <!--<li class="nav-item"><a class="nav-link" href="/how_to"><p style="color:white">How To</p></a></li>-->
-                        <!--<li class="nav-item"><a class="nav-link" href="/about"><p style="color:white">About</p></a></li>-->
-                    <!--</ul>-->
-                    <!--<ul class="navbar-nav ml-auto mt-2">-->
-                        <!--<li class="nav-item"><a class="nav-link" href="/logout"><p style="color:white">Log Out</p></a></li>-->
-                    <!--</ul>-->
-                <!--{% else %}-->
-                    <!--<ul class="navbar-nav mr-auto mt-2">-->
-                        <!--<li class="nav-item"><a class="nav-link" href="/how_to"><p style="color:white">How To</p></a></li>-->
-                        <!--<li class="nav-item"><a class="nav-link" href="/about"><p style="color:white"About</p></a></li>-->
-                    <!--</ul>-->
 
-                <!--{% endif %}-->
             </div>
         </nav>
 
         {% if get_flashed_messages() %}
             <header>
+                {% for message in get_flashed_messages() %}
+                    {% if message == "Your set has been created! Click on your name to see your Quizlet page." %}
+                        <div id="flash" class="alert alert-primary border text-center" role="alert" style="background-color: green">
+                            {{ get_flashed_messages() | join(" ") }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
                 <div id="flash" class="alert alert-primary border text-center" role="alert">
                     {{ get_flashed_messages() | join(" ") }}
                 </div>

@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from tempfile import mkdtemp
 import os
 import requests
@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 import pytesseract
 from PIL import Image
 import shutil
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -20,6 +21,26 @@ app.config["UPLOAD_FOLDER"] = ""
 
 app.debug = True
 
+# Ensure responses aren't cached
+if app.config["DEBUG"]:
+    @app.after_request
+    def after_request(response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Expires"] = 0
+        response.headers["Pragma"] = "no-cache"
+        return response
+
+
+# Decorator to ensure login
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Please log in first.")
+            return redirect('/')
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 # Route to show homepage
 @app.route('/', methods=["GET"])
@@ -32,7 +53,6 @@ def index():
     if "user_id" in session:
         if app.config["UPLOAD_FOLDER"]:
             clear_folder()
-
     return render_template("homepage.html")
 
 
@@ -43,11 +63,9 @@ def quizlet_authorize():
     if "access_token" in session:
         flash("You are already logged in!")
         return redirect('/')
-    # Generate random string for state (a string to be passed to Quizlet API, like a csrf token)
+    # Generate random string for state (a string to be passed to Quizlet API, like a csrf token), save in session
     state = os.urandom(24)
-    # Set up where all uploaded images will go to (in static folder, within uploaded_files,
-    # create temporary folder for each user)
-    app.config["UPLOAD_FOLDER"] = mkdtemp(dir="static/uploaded_files")
+    session["state"] = str(state)
     # Part 1 of quizlet's Oauth protocol: Get code that we can trade with API for an access code, scope is "write_set"
     return redirect("https://quizlet.com/authorize?response_type=code&client_id=XtkWJxXHWw&scope=read&scope=write_set"
                     "&state={}&redirect_uri=http://127.0.0.1:5000/authorized".format(state))
@@ -64,6 +82,11 @@ def authorized():
     # If user tries to manually enter this route, return error
     if not request.args.get("code"):
         flash("Invalid request!")
+        return redirect('/')
+    # Compare the state stored in session and the state that Quizlet handed back, making sure they are equal to prevent
+    # CSRF attacks
+    if request.args.get("state") != session["state"]:
+        flash("Oops! Something went wrong. Try waiting a few seconds before clicking \"allow.\"")
         return redirect('/')
     # Part 2 of Quizlet's Oauth protocol: Take code from previous url (passed in trough the url parameter),
     # and post it to Quizlet api to get an access code we can make API calls with
@@ -83,17 +106,19 @@ def authorized():
     # Store access token and user's id in session
     session["access_token"] = res_data["access_token"]
     session["user_id"] = res_data["user_id"]
-
+    # Set up where all uploaded images will go to (in static folder, within uploaded_files,
+    # create temporary folder for each user)
+    app.config["UPLOAD_FOLDER"] = mkdtemp(dir="static/uploaded_files")
     # Return to main page
     return redirect('/')
 
 
 # Log user out (Clear session's auth token and delete temporary folder)
 @app.route('/logout')
+@login_required
 def logout():
-    # Make sure user is logged in before the logout occurs
-    if "user_id" in session:
-        session.clear()
+    # Clear session to remove user_id, access_token, image_path, and other variables
+    session.clear()
     # Delete the user's temporary storage folder
     if "UPLOAD_FOLDER" in app.config:
         shutil.rmtree(path=app.config["UPLOAD_FOLDER"])
@@ -103,11 +128,8 @@ def logout():
 
 # Route that allows user to upload image to server (source: http://flask.pocoo.org/docs/0.12/patterns/fileuploads/)
 @app.route('/upload_image', methods=["GET", "POST"])
+@login_required
 def upload_image():
-    # Check that user is logged in
-    if "access_token" not in session:
-        flash("Please log in first!")
-        return redirect('/')
     # If request method is POST, save the provided file into the specified directory
     if request.method == 'POST':
         # Check if the POST request has the file input
@@ -139,6 +161,7 @@ def upload_image():
 
 # Route that allows user to crop the uploaded image for the terms only
 @app.route('/term_crop', methods=["GET", "POST"])
+@login_required
 def term_crop():
     # If request is a POST, take in the cropped coordinates from the html
     if request.method == "POST":
@@ -161,6 +184,7 @@ def term_crop():
 
 # Route that allows user to crop uploaded image for the definitions only (same logic as term_crop)
 @app.route('/definition_crop', methods=["GET", "POST"])
+@login_required
 def definition_crop():
     # If request is POST, take in coordinate inputs and crop image
     if request.method == "POST":
@@ -182,11 +206,8 @@ def definition_crop():
 
 # Route that writes the Quizlet set
 @app.route('/write_set', methods=["GET", "POST"])
+@login_required
 def write_set():
-    # If route is visited when nobody is logged in, throw an error
-    if "access_token" not in session:
-        flash("Please Log in First!")
-        return redirect('/')
     # If user tries to enter "/write_set" without having any images uploaded, return error
     if len(os.listdir(app.config["UPLOAD_FOLDER"])) == 0:
         flash("Invalid request! Please re-upload your image!")
@@ -234,9 +255,11 @@ def write_set():
             "jpn": "ja",
             "kor": "ko",
             "hin": "hi",
-            "deu": "de",
+            "deu_frak": "de",
             "ita": "it"
         }
+        print(lang_terms)
+        print(quizlet_languages)
         # Construct a data dict that is passed into the api call (POST request), along with the API url
         data = {
             "title": title,
@@ -247,9 +270,18 @@ def write_set():
         }
         url = "https://api.quizlet.com/2.0/sets"
         # Make POST request, passing in the headers (access token) and relevant data
-        requests.post(url, data=data, headers=headers)
-        # Let user know the set has been created
-        flash("Your set {} has been successfully created!".format(title))
+        res = requests.post(url, data=data, headers=headers)
+        # Save response as json to check if there is an error. If there is, redirect to home and flash message
+        res_json = res.json()
+        # print(res_json)
+        if "error" in res_json:
+            flash("Oops! Something went wrong, and your set was not created. Please try again!")
+            print(res_json)
+            print("terms: ", terms)
+            print("definitions: ", definitions)
+            return redirect("/")
+        # If set creation was successful, let user know
+        flash("Your set has been created! Click on your name to see your Quizlet page.")
         # Clear user's temporary folder (but don't delete the folder itself)
         clear_folder()
         # Return to home
