@@ -35,21 +35,21 @@ This design document will discuss Pictoset in two parts:
         
 ### Step-by-Step Breakdown of Pictoset
   * Logging in
-    * As mentioned above, the user logs in with Quizlet using the OAUTH protocol. When the user clicks *Log In*, the 
-    app makes a GET request to Quizlet's API passing in various parameters:
-        1. **Client ID**- Developer's API ID
-        2. **Scope**- Read, Write... the permissions that the user gives to the app to access their account with
-        3. **State**- A random string that I pass in that the Quizlet API must return back. I make sure the returned string matches
+    * As mentioned above, the user logs in with Quizlet using the OAUTH protocol. When the user clicks *Log In*, 
+    the app makes a GET request to Quizlet's API passing in various parameters:
+      1. **Client ID**- Developer's API ID
+      2. **Scope**- Read, Write... the permissions that the user gives to the app to access their account with
+      3. **State**- A random string that I pass in that the Quizlet API must return back. I make sure the returned string matches
            the string I sent in order to prevent Cross Site Request Forgery attacks
-        4. **Redirect URI**- The route to redirect the user once the code has been received. I redirect the user to the
+      4. **Redirect URI**- The route to redirect the user once the code has been received. I redirect the user to the
              */authorize* route of my web app where I handle getting the access token using the code received from Quizlet
     * When Quizlet receives these 4 parameters properly, it redirects the user to the specified route, and it returns
      a code and the state via GET parameters. The web app checks that the state matches the state it sent, and then takes the
      code and makes a POST request back to Quizlet API (to get access token) involving the following parameters:
-        1. **Grant Type**- Set to "authorization_code" by default (to specify that we need a authorization token back)
-        2. **code**- The code we received from Quizlet earlier
-        3. **redirect_uri**- Route to redirect the user once logging in is complete()
-        4. **client_id**- The Quizlet devloper's ID that Quizlet API gave me
+      1. **Grant Type**- Set to "authorization_code" by default (to specify that we need a authorization token back)
+      2. **code**- The code we received from Quizlet earlier
+      3. **redirect_uri**- Route to redirect the user once logging in is complete()
+      4. **client_id**- The Quizlet devloper's ID that Quizlet API gave me
     * Once POST request is done, user is redirected to home page, and the webapp receives and stores the access token in
       the app session. Login is now complete.
 

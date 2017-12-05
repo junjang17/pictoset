@@ -19,36 +19,38 @@ The main files for Pictoset include:
 3. virtual environment with pytesseract (Python wrapper for Tesseract)
 
 ### Installing Tesseract OCR Engine
-Install the [Tesseract engine](https://github.com/tesseract-ocr/tesseract). Below are various methods (taken from tesseract's github readme linked above)
+Install the [Tesseract engine](https://github.com/tesseract-ocr/tesseract). Below are various methods (taken from 
+tesseract's github readme linked above)
 
-####Linux
-Tesseract is available directly from many Linux distributions. The package is generally called 'tesseract' or 'tesseract-ocr' - search your distribution's repositories to find it. Packages are also generally available for language training data (search the repositories,) but if not you will need to download the appropriate training data (=< 3.02 or the latest from github.com), unpack it, and copy the .traineddata file into the 'tessdata' directory, probably /usr/share/tesseract-ocr/tessdata or /usr/share/tessdata.
-If Tesseract is not available for your distribution, or you want to use a newer version than they offer, you can compile your own. Note that older versions of Tesseract only supported processing .tiff files.
+  * **Linux**
+    * Tesseract is available directly from many Linux distributions. The package is generally called 'tesseract' or 
+      'tesseract-ocr' - search your distribution's repositories to find it. 
+    * Packages are also generally available for language training data (search the repositories,) but if not you will 
+      need to download the appropriate training data (=< 3.02 or the latest from github.com), 
+      unpack it, and copy the .traineddata file into the 'tessdata' directory, probably /usr/share/tesseract-ocr/tessdata 
+      or /usr/share/tessdata.
+    * If Tesseract is not available for your distribution, or you want to use a newer version than they offer, you can 
+      compile your own. Note that older versions of Tesseract only supported processing .tiff files.
 
-####macOS
-You can install Tesseract using either MacPorts or Homebrew. 
+  * **macOS**
+    * Using MacPorts
+      * To install Tesseract run this command:
+      
+        `sudo port install tesseract`
+    * Using Homebrew
+      * To install Tesseract run this command:
+      
+        `brew install tesseract`
+    * I highly recommend using the Homebrew method as it is simple. Also, you can skip set the PATH variable step
 
-**If you are on Mac, I highly recommend using the Homebrew method as it is simple. Also, you can skip set the PATH variable step**
-
-
->#####MacPorts
->To install Tesseract run this command:
->
->`sudo port install tesseract`
->
->#####Homebrew
->
->To install Tesseract run this command:
->
->`brew install tesseract`
-
-####Windows
-
-An unofficial installer for windows for Tesseract 3.05-dev and Tesseract 4.00-dev is available from Tesseract at UB Mannheim. This includes the training tools.
-
-An installer for the old version 3.02 is available for Windows from our download page. This includes the English training data. If you want to use another language, download the appropriate training data, unpack it using 7-zip, and copy the .traineddata file into the 'tessdata' directory, probably C:\Program Files\Tesseract-OCR\tessdata.
-
-To access tesseract-OCR from any location you may have to add the directory where the tesseract-OCR binaries are located to the Path variables, probably C:\Program Files\Tesseract-OCR.
+  * **Windows**
+    * An unofficial installer for windows for Tesseract 3.05-dev and Tesseract 4.00-dev is available from Tesseract at 
+      UB Mannheim. This includes the training tools.
+    * An installer for the old version 3.02 is available for Windows from our download page. This includes the English 
+      training data. If you want to use another language, download the appropriate training data, unpack it using 7-zip, 
+      and copy the .traineddata file into the 'tessdata' directory, probably C:\Program Files\Tesseract-OCR\tessdata.
+    * To access tesseract-OCR from any location you may have to add the directory where the tesseract-OCR binaries are 
+      located to the Path variables, probably C:\Program Files\Tesseract-OCR.
 
 
 
