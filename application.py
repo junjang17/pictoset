@@ -8,13 +8,14 @@ import pytesseract
 from PIL import Image
 import shutil
 from functools import wraps
+import config
 
 app = Flask(__name__)
 
-# TODO: FIgure out how to hide: app secret_key, quizlet id, quizlet secret (app.config, pull info from config.py, put config.py as gitignore)
-app.secret_key = "b'\xac\x88\xd5I\x02{\xda\x99(yN\xde?\xdf\xacA\x99\xf7h\xf7\xa98\x89\xc5'"
-app.config['QUIZLET_ID'] = "XtkWJxXHWw"
-app.config['QUIZLET_SECRET'] = "DbgGge2PQZrmUPy7wsnbcQ"
+# Pull important information (API keys, etc) from config.py
+app.secret_key = config.secret_key
+app.config['QUIZLET_ID'] = config.client_id
+app.config['QUIZLET_SECRET'] = config.client_secret
 
 # Initialize a key in app.config with an empty string so the helper function (clear_folder) does not raise error
 app.config["UPLOAD_FOLDER"] = ""
