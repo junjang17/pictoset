@@ -7,6 +7,7 @@ nav .navbar-brand
 
 body {
     font-family: "Apple SD Gothic Neo";
+
 }
 
 .navbar-expand-md
@@ -71,10 +72,11 @@ body main div#how_to{
 
 body main div#how_to p {
     font-size: xx-large;
+
 }
 
 body main div#content{
-    padding-top: 100px;
+    padding-top: 50px;
 }
 
 body main div.image-container{
@@ -101,6 +103,22 @@ body main div#prelog{
 
 body main div#prelog p{
     font-size: x-large;
+}
+
+body #logo-container{
+    width:480px;
+    height:140px;
+    margin:auto;
+    padding-bottom: 100px;
+    padding-top: 50px;
+
+}
+
+body #logo-container img{
+    width:480px;
+    height:140px;
+    margin:auto;
+
 }
 
 

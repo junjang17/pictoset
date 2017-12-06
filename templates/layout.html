@@ -38,6 +38,9 @@
             <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+
+
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session.user_id %}
                     <ul class="navbar-nav mr-auto mt-2">
@@ -77,8 +80,14 @@
             </header>
         {% endif %}
 
+
+        <div id="logo-container">
+            <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}">
+        </div>
+
         <main class="container p-5" id="main_block">
-            {% block main %}{% endblock %}
+            {% block main %}
+            {% endblock %}
         </main>
 
     </body>

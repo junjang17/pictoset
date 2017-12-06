@@ -163,6 +163,10 @@ def upload_image():
 @app.route('/term_crop', methods=["GET", "POST"])
 @login_required
 def term_crop():
+    # If user tries to access route without having uploaded a image, show error
+    if "image_path" not in session:
+        flash("Please upload an image first!")
+        return redirect('/')
     # If request is a POST, take in the cropped coordinates from the html
     if request.method == "POST":
         image = Image.open(session["image_path"])
@@ -186,6 +190,10 @@ def term_crop():
 @app.route('/definition_crop', methods=["GET", "POST"])
 @login_required
 def definition_crop():
+    # If user tries to access route without having uploaded a image, show error
+    if "image_path" not in session:
+        flash("Please upload an image first!")
+        return redirect('/')
     # If request is POST, take in coordinate inputs and crop image
     if request.method == "POST":
         image = Image.open(session["image_path"])
@@ -210,8 +218,8 @@ def definition_crop():
 def write_set():
     # If user tries to enter "/write_set" without having any images uploaded, return error
     if len(os.listdir(app.config["UPLOAD_FOLDER"])) == 0:
-        flash("Invalid request! Please re-upload your image!")
-        return redirect(request.url)
+        flash("Invalid Request! Please re-upload your image!")
+        return redirect("/")
     # Handle POST request when images are properly cropped and title and term/definition languages are set properly
     if request.method == "POST":
         # Pass access token to Quizlet API in the header of a POST request to make an API call
@@ -317,6 +325,7 @@ def allowed_file(filename):
 # Helper function that clears user's temporary folder
 def clear_folder():
     folder = app.config["UPLOAD_FOLDER"]
+    session.pop("image_path", None)
     for file in os.listdir(folder):
         file_path = os.path.join(folder, file)
         try:
